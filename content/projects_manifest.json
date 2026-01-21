@@ -22,9 +22,9 @@
   },
   {
     "id": "scraper",
-    "title": "AUTO-SCRAPER",
-    "tech_stack": "Selenium / Local LLM",
-    "description": "Automated market-data collection pipeline with LLM-powered summarization.",
+    "title": "AUTO-SCRAPER + SPATIAL DB",
+    "tech_stack": "Selenium / PostGIS / Docker / Flask",
+    "description": "Automated web scraping pipeline with spatial database for geospatial market research and analysis.",
     "theme": "amber"
   }
 ]

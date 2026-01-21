@@ -17,43 +17,43 @@
 <div class="col-span-6 md:col-span-5">REMARKS / PROCEDURES</div>
 </div>
 
-<!-- Entry 1 -->
+<!-- Entry 1: WFR Telemetry Lead -->
 <div class="grid grid-cols-12 border-b border-gray-800 py-3 px-4 logbook-row hover:bg-white/5 transition">
 <div class="col-span-2 text-amber-400">2024-Pres</div>
-<div class="col-span-4 md:col-span-3 font-bold">DATA ACQUISITION LEAD</div>
-<div class="col-span-2 hidden md:block text-gray-500">WFR TEAM</div>
-<div class="col-span-6 md:col-span-5 text-gray-300">
-Western Formula Racing. Architected Project PECAN (React/CAN-bus). Reduced dependence on commercial tools by 80%. Docker-based telemetry infra.
-</div>
-</div>
-
-<!-- Entry 2 -->
-<div class="grid grid-cols-12 border-b border-gray-800 py-3 px-4 logbook-row hover:bg-white/5 transition">
-<div class="col-span-2 text-amber-400">2024-Pres</div>
-<div class="col-span-4 md:col-span-3 font-bold">RESEARCHER (MOBILITY)</div>
+<div class="col-span-4 md:col-span-3 font-bold">SW ENG & TELEMETRY LEAD</div>
 <div class="col-span-2 hidden md:block text-gray-500">WESTERN U</div>
 <div class="col-span-6 md:col-span-5 text-gray-300">
-Dept of Geography. Causal analytics on commuter responses. WGAN modeling for demand forecasting.
+Western Formula Racing. Architected end-to-end telemetry platform (CAN-bus, InfluxDB, React). CI/CD pipelines with GitHub Actions. Reduced commercial tool dependency by 80%, diagnostic time by 50%.
 </div>
 </div>
 
-<!-- Entry 3 -->
+<!-- Entry 2: Mobility Research -->
 <div class="grid grid-cols-12 border-b border-gray-800 py-3 px-4 logbook-row hover:bg-white/5 transition">
-<div class="col-span-2 text-amber-400">2025-05</div>
-<div class="col-span-4 md:col-span-3 font-bold">FINANCIAL ANALYST INT.</div>
+<div class="col-span-2 text-amber-400">2024-Pres</div>
+<div class="col-span-4 md:col-span-3 font-bold">DATA ENG RESEARCHER</div>
+<div class="col-span-2 hidden md:block text-gray-500">WESTERN U</div>
+<div class="col-span-6 md:col-span-5 text-gray-300">
+Dept of Geography & Environment. Quasi-experimental studies with causal inference. Large-scale ETL pipelines (5M+ records). WGAN models for mobility forecasting.
+</div>
+</div>
+
+<!-- Entry 3: CDH Investment -->
+<div class="grid grid-cols-12 border-b border-gray-800 py-3 px-4 logbook-row hover:bg-white/5 transition">
+<div class="col-span-2 text-amber-400">2024-05</div>
+<div class="col-span-4 md:col-span-3 font-bold">FINANCIAL ANALYST INTERN</div>
 <div class="col-span-2 hidden md:block text-gray-500">SHANGHAI</div>
 <div class="col-span-6 md:col-span-5 text-gray-300">
-CDH Investment. Automated market-data collection w/ Python-Selenium & LLMs. Reduced manual work by 90%.
+CDH Investment. Automated market-data pipeline (Selenium, LLM). PostGIS/PostgreSQL deployment on Docker. Reduced manual data gathering by 90%.
 </div>
 </div>
 
-<!-- Entry 4 (Education/Cert) -->
+<!-- Entry 4: Education -->
 <div class="grid grid-cols-12 border-b border-gray-800 py-3 px-4 logbook-row hover:bg-white/5 transition opacity-75">
 <div class="col-span-2 text-green-500">EDUCATION</div>
 <div class="col-span-4 md:col-span-3 font-bold">M.Sc. & B.A.</div>
 <div class="col-span-2 hidden md:block text-gray-500">UWO / UCSB</div>
 <div class="col-span-6 md:col-span-5 text-gray-300 italic">
-M.Sc. Geography (Western University, exp July 2026). B.A. GIS (UC Santa Barbara, 2024, Distinction in Major).
+M.Sc. Geography & Environment (Western U, exp June 2026, GPA 89.25/100). B.A. GIS (UCSB, 2024, Distinction in Major, GPA 3.80/4.0).
 </div>
 </div>
 </div>

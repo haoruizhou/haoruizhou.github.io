@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +12,9 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --av-black: #0f1115;
@@ -38,17 +41,19 @@
         .chart-grid {
             background-size: 50px 50px;
             background-image:
-                    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-                    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+                linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
         }
 
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
+
         ::-webkit-scrollbar-track {
             background: var(--av-black);
         }
+
         ::-webkit-scrollbar-thumb {
             background: var(--av-dark-gray);
             border: 1px solid #333;
@@ -64,29 +69,33 @@
         .blink {
             animation: blinker 2s linear infinite;
         }
+
         @keyframes blinker {
-            50% { opacity: 0; }
+            50% {
+                opacity: 0;
+            }
         }
 
         .crt-scanline {
-            background: linear-gradient(
-                    to bottom,
-                    rgba(255,255,255,0),
-                    rgba(255,255,255,0) 50%,
-                    rgba(0,0,0,0.1) 50%,
-                    rgba(0,0,0,0.1)
-            );
+            background: linear-gradient(to bottom,
+                    rgba(255, 255, 255, 0),
+                    rgba(255, 255, 255, 0) 50%,
+                    rgba(0, 0, 0, 0.1) 50%,
+                    rgba(0, 0, 0, 0.1));
             background-size: 100% 4px;
             pointer-events: none;
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             z-index: 9999;
             opacity: 0.15;
         }
 
         /* Specific utility for logbook lines */
         .logbook-row:nth-child(even) {
-            background-color: rgba(255,255,255,0.03);
+            background-color: rgba(255, 255, 255, 0.03);
         }
 
         .waypoint-hover:hover {
@@ -94,7 +103,8 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        .waypoint-hover:hover + text {
+
+        .waypoint-hover:hover+text {
             fill: var(--av-magenta);
             font-weight: bold;
         }
@@ -110,21 +120,25 @@
             border-bottom: 1px solid #333;
             padding-bottom: 0.25em;
         }
+
         .prose p {
             margin-bottom: 1em;
             line-height: 1.6;
             color: #cbd5e1;
         }
+
         .prose ul {
             list-style-type: none;
             padding-left: 0;
             margin-bottom: 1em;
         }
+
         .prose li {
             margin-bottom: 0.5em;
             padding-left: 1.5em;
             position: relative;
         }
+
         .prose li::before {
             content: ">>";
             position: absolute;
@@ -133,6 +147,7 @@
             font-family: monospace;
             font-size: 0.8em;
         }
+
         .prose code {
             background: rgba(255, 255, 255, 0.1);
             padding: 2px 4px;
@@ -141,6 +156,7 @@
             font-size: 0.8em;
             color: var(--av-green);
         }
+
         .prose strong {
             color: white;
             font-weight: 600;
@@ -150,10 +166,21 @@
 
         /* Radar Spin: Single Revolution then Fade */
         @keyframes radar-spin {
-            0% { transform: rotate(0deg); opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: rotate(360deg); opacity: 0; }
+            0% {
+                transform: rotate(0deg);
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: rotate(360deg);
+                opacity: 0;
+            }
         }
+
         .radar-sweep {
             /* Origin set to Tower Coordinates (300, 220) - NW position */
             transform-origin: 300px 220px;
@@ -166,414 +193,492 @@
                 transform: translate(-200px, 400px) rotate(-10deg) scale(0.5);
                 opacity: 0;
             }
+
             10% {
                 opacity: 1;
             }
+
             100% {
                 transform: translate(300px, 320px) rotate(-10deg) scale(1);
                 opacity: 1;
             }
         }
+
         .plane-icon {
             /* Initial state off-screen/hidden if needed, or handled by animation */
             animation: approach-07 6s ease-out forwards;
             transform-box: fill-box;
             transform-origin: center;
         }
-
     </style>
 </head>
+
 <body class="chart-grid min-h-screen flex flex-col">
 
-<!-- CRT Effect Overlay -->
-<div class="crt-scanline"></div>
+    <!-- CRT Effect Overlay -->
+    <div class="crt-scanline"></div>
 
-<!-- Top Navigation / Status Bar -->
-<header class="fixed top-0 w-full z-50 bg-[#0f1115] border-b border-gray-800 h-14 flex items-center justify-between px-4 font-mono text-xs md:text-sm select-none">
-    <div class="flex items-center gap-4">
-        <div class="text-amber-400 font-bold flex items-center gap-2">
-            <i data-lucide="plane" class="w-4 h-4"></i>
-            <span class="hidden md:inline">FLT_DECK_V1.0</span>
-        </div>
-        <div class="text-gray-400">
-            LAT: <span id="lat" class="text-blue-400">42.98N</span>
-            LON: <span id="lon" class="text-blue-400">081.24W</span>
-        </div>
-    </div>
-
-    <div class="flex items-center gap-6">
-        <div class="hidden md:block text-gray-400">
-            GPS: <span class="text-green-500">PRIMARY</span>
-        </div>
-        <div class="text-amber-400 font-bold" id="zulu-clock">
-            12:00:00Z
-        </div>
-        <div class="px-2 py-1 border border-gray-600 rounded text-xs bg-gray-800 cursor-pointer hover:bg-gray-700 transition" onclick="toggleMenu()">
-            MENU
-        </div>
-    </div>
-</header>
-
-<!-- Main Interface -->
-<main class="flex-1 flex pt-14 h-screen overflow-hidden relative">
-
-    <!-- Left Sidebar: FMS / Navigation -->
-    <aside id="sidebar" class="w-full md:w-80 bg-[#0f1115] border-r border-gray-800 flex flex-col z-40 transition-transform duration-300 absolute md:relative transform -translate-x-full md:translate-x-0 h-full">
-
-        <!-- Pilot Profile Header -->
-        <div class="p-6 border-b border-gray-800">
-            <h1 class="text-2xl font-bold text-white mb-1">HAORUI ZHOU</h1>
-            <p class="text-xs text-gray-400 font-mono mb-3">DATA ENG // TELEMETRY // GIS</p>
-            <div class="flex gap-2 text-xs font-mono">
-                <span class="px-2 py-0.5 bg-blue-900/50 text-blue-300 border border-blue-800 rounded">TC/FAA PILOT</span>
-                <span class="px-2 py-0.5 bg-green-900/50 text-green-300 border border-green-800 rounded">ACTIVE</span>
+    <!-- Top Navigation / Status Bar -->
+    <header
+        class="fixed top-0 w-full z-50 bg-[#0f1115] border-b border-gray-800 h-14 flex items-center justify-between px-4 font-mono text-xs md:text-sm select-none">
+        <div class="flex items-center gap-4">
+            <div class="text-amber-400 font-bold flex items-center gap-2">
+                <i data-lucide="plane" class="w-4 h-4"></i>
+                <span class="hidden md:inline">FLT_DECK_V1.0</span>
+            </div>
+            <div class="text-gray-400">
+                LAT: <span id="lat" class="text-blue-400">42.98N</span>
+                LON: <span id="lon" class="text-blue-400">081.24W</span>
             </div>
         </div>
 
-        <!-- Nav Buttons (FMS Style) -->
-        <nav class="flex-1 overflow-y-auto p-2 space-y-1 font-mono">
-            <button onclick="switchView('chart')" class="w-full text-left px-4 py-3 rounded hover:bg-gray-800 border border-transparent hover:border-gray-600 text-gray-300 hover:text-amber-400 transition group flex justify-between items-center active-nav bg-gray-800/50 border-l-4 border-l-amber-400">
-                <span>[1] CHART_VIEW</span>
-                <i data-lucide="map" class="w-4 h-4 opacity-50 group-hover:opacity-100"></i>
-            </button>
-            <button onclick="switchView('research')" class="w-full text-left px-4 py-3 rounded hover:bg-gray-800 border border-transparent hover:border-gray-600 text-gray-300 hover:text-amber-400 transition group flex justify-between items-center">
-                <span>[2] RESEARCH_LAB</span>
-                <i data-lucide="microscope" class="w-4 h-4 opacity-50 group-hover:opacity-100"></i>
-            </button>
-            <button onclick="switchView('logbook')" class="w-full text-left px-4 py-3 rounded hover:bg-gray-800 border border-transparent hover:border-gray-600 text-gray-300 hover:text-amber-400 transition group flex justify-between items-center">
-                <span>[3] EXP_LOGBOOK</span>
-                <i data-lucide="book-open" class="w-4 h-4 opacity-50 group-hover:opacity-100"></i>
-            </button>
-            <button onclick="switchView('projects')" class="w-full text-left px-4 py-3 rounded hover:bg-gray-800 border border-transparent hover:border-gray-600 text-gray-300 hover:text-amber-400 transition group flex justify-between items-center">
-                <span>[4] PROJECTS</span>
-                <i data-lucide="folder-git-2" class="w-4 h-4 opacity-50 group-hover:opacity-100"></i>
-            </button>
-            <button onclick="switchView('comms')" class="w-full text-left px-4 py-3 rounded hover:bg-gray-800 border border-transparent hover:border-gray-600 text-gray-300 hover:text-amber-400 transition group flex justify-between items-center">
-                <span>[5] COMMS/CONTACT</span>
-                <i data-lucide="radio" class="w-4 h-4 opacity-50 group-hover:opacity-100"></i>
-            </button>
-        </nav>
-
-        <!-- System Status Footer -->
-        <div class="p-4 border-t border-gray-800 font-mono text-xs text-gray-500">
-            <div class="flex justify-between">
-                <span>BAT</span>
-                <span class="text-green-500">100%</span>
+        <div class="flex items-center gap-6">
+            <div class="hidden md:block text-gray-400">
+                GPS: <span class="text-green-500">PRIMARY</span>
             </div>
-            <div class="flex justify-between mt-1">
-                <span>DATABASE</span>
-                <span class="text-amber-400">M.Sc. LOADING...</span>
+            <div class="text-amber-400 font-bold" id="zulu-clock">
+                12:00:00Z
+            </div>
+            <div class="px-2 py-1 border border-gray-600 rounded text-xs bg-gray-800 cursor-pointer hover:bg-gray-700 transition"
+                onclick="toggleMenu()">
+                MENU
             </div>
         </div>
-    </aside>
+    </header>
 
-    <!-- Content Area -->
-    <div class="flex-1 relative overflow-y-auto bg-[#13161a]" id="main-display">
+    <!-- Main Interface -->
+    <main class="flex-1 flex pt-14 h-screen overflow-hidden relative">
 
-        <!-- SECTION: CHART VIEW (Home) -->
-        <section id="chart" class="absolute inset-0 flex items-center justify-center">
-            <div class="w-full h-full relative">
-                <!-- SVG Chart -->
-                <svg class="w-full h-full absolute inset-0" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
-                    <defs>
-                        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
-                        </pattern>
-                        <!-- Radar Gradient -->
-                        <linearGradient id="radar-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stop-color="rgba(0, 180, 216, 0.5)" />
-                            <stop offset="100%" stop-color="rgba(0, 180, 216, 0)" />
-                        </linearGradient>
-                    </defs>
-                    <rect width="100%" height="100%" fill="url(#grid)" />
+        <!-- Left Sidebar: FMS / Navigation -->
+        <aside id="sidebar"
+            class="w-full md:w-80 bg-[#0f1115] border-r border-gray-800 flex flex-col z-40 transition-transform duration-300 absolute md:relative transform -translate-x-full md:translate-x-0 h-full">
 
-                    <!-- Airspace Rings -->
-                    <circle cx="400" cy="300" r="250" fill="none" stroke="#00b4d8" stroke-width="1" stroke-dasharray="10,5" opacity="0.3" />
-                    <circle cx="400" cy="300" r="150" fill="none" stroke="#d63384" stroke-width="1" stroke-dasharray="10,5" opacity="0.3" />
+            <!-- Pilot Profile Header -->
+            <div class="p-6 border-b border-gray-800">
+                <h1 class="text-2xl font-bold text-white mb-1">HAORUI ZHOU</h1>
+                <p class="text-xs text-gray-400 font-mono mb-3">DATA ENG // TELEMETRY // GIS</p>
+                <div class="flex gap-2 text-xs font-mono">
+                    <span class="px-2 py-0.5 bg-blue-900/50 text-blue-300 border border-blue-800 rounded">TC/FAA
+                        PILOT</span>
+                    <span
+                        class="px-2 py-0.5 bg-green-900/50 text-green-300 border border-green-800 rounded">ACTIVE</span>
+                </div>
+            </div>
 
-                    <!-- TOWER ICON: Origin of Radar (NW between 07 and 15L) -->
-                    <!-- Runway 07 is Left(West), 15L is TopLeft(NorthWest). Tower placed between them. -->
-                    <g transform="translate(300, 220)">
-                        <polygon points="0,-10 5,10 -5,10" fill="#1e2329" stroke="#2ec4b6" stroke-width="1"/>
-                        <rect x="-3" y="-14" width="6" height="6" fill="#1e2329" stroke="#2ec4b6" stroke-width="1"/>
-                        <text x="0" y="22" text-anchor="middle" fill="#2ec4b6" font-family="JetBrains Mono" font-size="8" font-weight="bold">TWR</text>
-                    </g>
+            <!-- Nav Buttons (FMS Style) -->
+            <nav class="flex-1 overflow-y-auto p-2 space-y-1 font-mono">
+                <button onclick="switchView('chart')"
+                    class="w-full text-left px-4 py-3 rounded hover:bg-gray-800 border border-transparent hover:border-gray-600 text-gray-300 hover:text-amber-400 transition group flex justify-between items-center active-nav bg-gray-800/50 border-l-4 border-l-amber-400">
+                    <span>[1] CHART_VIEW</span>
+                    <i data-lucide="map" class="w-4 h-4 opacity-50 group-hover:opacity-100"></i>
+                </button>
+                <button onclick="switchView('research')"
+                    class="w-full text-left px-4 py-3 rounded hover:bg-gray-800 border border-transparent hover:border-gray-600 text-gray-300 hover:text-amber-400 transition group flex justify-between items-center">
+                    <span>[2] RESEARCH_LAB</span>
+                    <i data-lucide="microscope" class="w-4 h-4 opacity-50 group-hover:opacity-100"></i>
+                </button>
+                <button onclick="switchView('logbook')"
+                    class="w-full text-left px-4 py-3 rounded hover:bg-gray-800 border border-transparent hover:border-gray-600 text-gray-300 hover:text-amber-400 transition group flex justify-between items-center">
+                    <span>[3] EXP_LOGBOOK</span>
+                    <i data-lucide="book-open" class="w-4 h-4 opacity-50 group-hover:opacity-100"></i>
+                </button>
+                <button onclick="switchView('projects')"
+                    class="w-full text-left px-4 py-3 rounded hover:bg-gray-800 border border-transparent hover:border-gray-600 text-gray-300 hover:text-amber-400 transition group flex justify-between items-center">
+                    <span>[4] PROJECTS</span>
+                    <i data-lucide="folder-git-2" class="w-4 h-4 opacity-50 group-hover:opacity-100"></i>
+                </button>
+                <button onclick="switchView('comms')"
+                    class="w-full text-left px-4 py-3 rounded hover:bg-gray-800 border border-transparent hover:border-gray-600 text-gray-300 hover:text-amber-400 transition group flex justify-between items-center">
+                    <span>[5] COMMS/CONTACT</span>
+                    <i data-lucide="radio" class="w-4 h-4 opacity-50 group-hover:opacity-100"></i>
+                </button>
+            </nav>
 
-                    <!-- TOWER RADAR SCAN: Animated Group (Origin 300, 220) -->
-                    <g class="radar-sweep">
-                        <!-- The scan line (Length ~400 to cover corners) -->
-                        <line x1="300" y1="220" x2="300" y2="-180" stroke="#00b4d8" stroke-width="2" opacity="0.8" />
-                        <!-- The sector trail (90 deg wedge) -->
-                        <path d="M 300 220 L 300 -180 A 400 400 0 0 0 -100 220 Z" fill="url(#radar-grad)" opacity="0.15" transform="rotate(-90, 300, 220)" />
-                    </g>
+            <!-- System Status Footer -->
+            <div class="p-4 border-t border-gray-800 font-mono text-xs text-gray-500">
+                <div class="flex justify-between">
+                    <span>BAT</span>
+                    <span class="text-green-500">100%</span>
+                </div>
+                <div class="flex justify-between mt-1">
+                    <span>DATABASE</span>
+                    <span class="text-amber-400">M.Sc. LOADING...</span>
+                </div>
+            </div>
+        </aside>
 
-                    <!-- KSBA Structure: Faint Crosswind Runways 15L/R & 33L/R -->
-                    <!-- Rotated approx 80deg relative to 07/25 -->
-                    <g transform="translate(400, 300) rotate(70)" opacity="0.2">
-                        <!-- 15R / 33L -->
-                        <rect x="-100" y="-40" width="200" height="25" fill="#1e2329" stroke="white" stroke-width="1" />
-                        <!-- 15R (Top/NW end) -->
-                        <text x="-90" y="-28" fill="white" font-family="monospace" font-size="10" transform="rotate(90, -90, -28)">15R</text>
-                        <!-- 33L (Bottom/SE end) -->
-                        <text x="90" y="-28" fill="white" font-family="monospace" font-size="10" transform="rotate(-90, 90, -28)">33L</text>
+        <!-- Content Area -->
+        <div class="flex-1 relative overflow-y-auto bg-[#13161a]" id="main-display">
 
-                        <!-- 15L / 33R -->
-                        <rect x="-100" y="15" width="200" height="25" fill="#1e2329" stroke="white" stroke-width="1" />
-                        <!-- 15L (Top/NW end) -->
-                        <text x="-90" y="27" fill="white" font-family="monospace" font-size="10" transform="rotate(90, -90, 27)">15L</text>
-                        <!-- 33R (Bottom/SE end) -->
-                        <text x="90" y="27" fill="white" font-family="monospace" font-size="10" transform="rotate(-90, 90, 27)">33R</text>
-                    </g>
+            <!-- SECTION: CHART VIEW (Home) -->
+            <section id="chart" class="absolute inset-0 flex items-center justify-center">
+                <div class="w-full h-full relative">
+                    <!-- SVG Chart -->
+                    <svg class="w-full h-full absolute inset-0" viewBox="0 0 800 600"
+                        preserveAspectRatio="xMidYMid slice">
+                        <defs>
+                            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)"
+                                    stroke-width="0.5" />
+                            </pattern>
+                            <!-- Radar Gradient -->
+                            <linearGradient id="radar-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="rgba(0, 180, 216, 0.5)" />
+                                <stop offset="100%" stop-color="rgba(0, 180, 216, 0)" />
+                            </linearGradient>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#grid)" />
 
-                    <!-- Main Runway 07/25 (KSBA Primary) -->
-                    <g transform="translate(400, 300) rotate(-10)">
-                        <!-- Asphalt -->
-                        <rect x="-200" y="-25" width="400" height="50" fill="#2a2a2a" stroke="white" stroke-width="2" />
-                        <!-- Centerline -->
-                        <line x1="-180" y1="0" x2="180" y2="0" stroke="white" stroke-width="2" stroke-dasharray="15,15" />
+                        <!-- Airspace Rings -->
+                        <circle cx="400" cy="300" r="250" fill="none" stroke="#00b4d8" stroke-width="1"
+                            stroke-dasharray="10,5" opacity="0.3" />
+                        <circle cx="400" cy="300" r="150" fill="none" stroke="#d63384" stroke-width="1"
+                            stroke-dasharray="10,5" opacity="0.3" />
 
-                        <!-- Threshold Markings -->
-                        <path d="M -190 -20 L -190 20 M -195 -20 L -195 20" stroke="white" stroke-width="2" />
-                        <path d="M 190 -20 L 190 20 M 195 -20 L 195 20" stroke="white" stroke-width="2" />
+                        <!-- TOWER ICON: Origin of Radar (NW between 07 and 15L) -->
+                        <!-- Runway 07 is Left(West), 15L is TopLeft(NorthWest). Tower placed between them. -->
+                        <g transform="translate(300, 220)">
+                            <polygon points="0,-10 5,10 -5,10" fill="#1e2329" stroke="#2ec4b6" stroke-width="1" />
+                            <rect x="-3" y="-14" width="6" height="6" fill="#1e2329" stroke="#2ec4b6"
+                                stroke-width="1" />
+                            <text x="0" y="22" text-anchor="middle" fill="#2ec4b6" font-family="JetBrains Mono"
+                                font-size="8" font-weight="bold">TWR</text>
+                        </g>
 
-                        <!-- Numbers: Perfectly Centered on Centerline -->
-                        <!-- 07 on the West (Left) End -->
-                        <text x="-160" y="0" fill="white" font-family="monospace" font-weight="bold" font-size="18" dominant-baseline="middle" text-anchor="middle" transform="rotate(90, -160, 0)">07</text>
+                        <!-- TOWER RADAR SCAN: Animated Group (Origin 300, 220) -->
+                        <g class="radar-sweep">
+                            <!-- The scan line (Length ~400 to cover corners) -->
+                            <line x1="300" y1="220" x2="300" y2="-180" stroke="#00b4d8" stroke-width="2"
+                                opacity="0.8" />
+                            <!-- The sector trail (90 deg wedge) -->
+                            <path d="M 300 220 L 300 -180 A 400 400 0 0 0 -100 220 Z" fill="url(#radar-grad)"
+                                opacity="0.15" transform="rotate(-90, 300, 220)" />
+                        </g>
 
-                        <!-- 25 on the East (Right) End -->
-                        <text x="160" y="0" fill="white" font-family="monospace" font-weight="bold" font-size="18" dominant-baseline="middle" text-anchor="middle" transform="rotate(-90, 160, 0)">25</text>
-                    </g>
+                        <!-- KSBA Structure: Faint Crosswind Runways 15L/R & 33L/R -->
+                        <!-- Rotated approx 80deg relative to 07/25 -->
+                        <g transform="translate(400, 300) rotate(70)" opacity="0.2">
+                            <!-- 15R / 33L -->
+                            <rect x="-100" y="-40" width="200" height="25" fill="#1e2329" stroke="white"
+                                stroke-width="1" />
+                            <!-- 15R (Top/NW end) -->
+                            <text x="-90" y="-28" fill="white" font-family="monospace" font-size="10"
+                                transform="rotate(90, -90, -28)">15R</text>
+                            <!-- 33L (Bottom/SE end) -->
+                            <text x="90" y="-28" fill="white" font-family="monospace" font-size="10"
+                                transform="rotate(-90, 90, -28)">33L</text>
 
-                    <!-- ANIMATED AIRPLANE ON APPROACH -->
-                    <g class="plane-icon">
-                        <!-- Simple Plane Shape pointing right -->
-                        <path d="M 0 0 L -10 10 L 20 0 L -10 -10 Z" fill="#ffc107" stroke="none" />
-                        <!-- Strobe Light -->
-                        <circle cx="0" cy="0" r="2" fill="white" class="blink" />
-                    </g>
+                            <!-- 15L / 33R -->
+                            <rect x="-100" y="15" width="200" height="25" fill="#1e2329" stroke="white"
+                                stroke-width="1" />
+                            <!-- 15L (Top/NW end) -->
+                            <text x="-90" y="27" fill="white" font-family="monospace" font-size="10"
+                                transform="rotate(90, -90, 27)">15L</text>
+                            <!-- 33R (Bottom/SE end) -->
+                            <text x="90" y="27" fill="white" font-family="monospace" font-size="10"
+                                transform="rotate(-90, 90, 27)">33R</text>
+                        </g>
 
-                    <!-- Taxiways -->
-                    <path d="M 350 320 L 350 450 L 200 450" fill="none" stroke="#ffc107" stroke-width="2" />
-                    <path d="M 450 280 L 450 150 L 600 150" fill="none" stroke="#ffc107" stroke-width="2" />
+                        <!-- Main Runway 07/25 (KSBA Primary) -->
+                        <g transform="translate(400, 300) rotate(-10)">
+                            <!-- Asphalt -->
+                            <rect x="-200" y="-25" width="400" height="50" fill="#2a2a2a" stroke="white"
+                                stroke-width="2" />
+                            <!-- Centerline -->
+                            <line x1="-180" y1="0" x2="180" y2="0" stroke="white" stroke-width="2"
+                                stroke-dasharray="15,15" />
 
-                    <!-- Waypoints / Clickables -->
-                    <!-- Research Node -->
-                    <g onclick="switchView('research')" class="cursor-pointer group">
-                        <path d="M 600 150 L 610 165 L 590 165 Z" fill="#1e2329" stroke="#d63384" stroke-width="2" class="waypoint-hover"/>
-                        <text x="600" y="140" text-anchor="middle" fill="#d63384" font-family="JetBrains Mono" font-size="10">RESEARCH</text>
-                        <text x="600" y="185" text-anchor="middle" fill="gray" font-family="JetBrains Mono" font-size="8" class="opacity-0 group-hover:opacity-100">MOBILITY LAB</text>
-                    </g>
+                            <!-- Threshold Markings -->
+                            <path d="M -190 -20 L -190 20 M -195 -20 L -195 20" stroke="white" stroke-width="2" />
+                            <path d="M 190 -20 L 190 20 M 195 -20 L 195 20" stroke="white" stroke-width="2" />
 
-                    <!-- Projects Node -->
-                    <g onclick="switchView('projects')" class="cursor-pointer group">
-                        <path d="M 200 450 L 210 465 L 190 465 Z" fill="#1e2329" stroke="#00b4d8" stroke-width="2" class="waypoint-hover"/>
-                        <text x="200" y="440" text-anchor="middle" fill="#00b4d8" font-family="JetBrains Mono" font-size="10">PROJECTS</text>
-                        <text x="200" y="485" text-anchor="middle" fill="gray" font-family="JetBrains Mono" font-size="8" class="opacity-0 group-hover:opacity-100">PECAN / ETL</text>
-                    </g>
+                            <!-- Numbers: Perfectly Centered on Centerline -->
+                            <!-- 07 on the West (Left) End -->
+                            <text x="-160" y="0" fill="white" font-family="monospace" font-weight="bold" font-size="18"
+                                dominant-baseline="middle" text-anchor="middle"
+                                transform="rotate(90, -160, 0)">07</text>
 
-                    <!-- About: Terminal Building Icon (Relocated to Bottom Right to avoid overlap) -->
-                    <g onclick="switchView('logbook')" class="cursor-pointer group" transform="translate(680, 380)">
-                        <!-- Main Terminal Body -->
-                        <rect x="-20" y="-15" width="40" height="30" rx="2" fill="#1e2329" stroke="white" stroke-width="2" class="waypoint-hover"/>
-                        <!-- Concourse Piers -->
-                        <rect x="-25" y="-5" width="10" height="10" fill="#1e2329" stroke="white" stroke-width="2" />
-                        <rect x="15" y="-5" width="10" height="10" fill="#1e2329" stroke="white" stroke-width="2" />
-                        <!-- Label -->
-                        <text x="0" y="-25" text-anchor="middle" fill="white" font-family="JetBrains Mono" font-size="10">ABOUT</text>
-                        <text x="0" y="25" text-anchor="middle" fill="gray" font-family="JetBrains Mono" font-size="8" class="opacity-0 group-hover:opacity-100">TERMINAL</text>
-                    </g>
+                            <!-- 25 on the East (Right) End -->
+                            <text x="160" y="0" fill="white" font-family="monospace" font-weight="bold" font-size="18"
+                                dominant-baseline="middle" text-anchor="middle"
+                                transform="rotate(-90, 160, 0)">25</text>
+                        </g>
 
-                    <!-- Data Block -->
-                    <g transform="translate(650, 500)">
-                        <rect x="0" y="0" width="120" height="60" fill="rgba(0,0,0,0.5)" stroke="white" stroke-width="1" />
-                        <text x="10" y="20" fill="white" font-family="JetBrains Mono" font-size="10">TWR 119.700</text>
-                        <text x="10" y="35" fill="#ffc107" font-family="JetBrains Mono" font-size="10">ATIS: INFO Z</text>
-                        <text x="10" y="50" fill="#2ec4b6" font-family="JetBrains Mono" font-size="10">WIND 270@10</text>
-                    </g>
-                </svg>
+                        <!-- ANIMATED AIRPLANE ON APPROACH -->
+                        <g class="plane-icon">
+                            <!-- Simple Plane Shape pointing right -->
+                            <path d="M 0 0 L -10 10 L 20 0 L -10 -10 Z" fill="#ffc107" stroke="none" />
+                            <!-- Strobe Light -->
+                            <circle cx="0" cy="0" r="2" fill="white" class="blink" />
+                        </g>
 
-                <!-- Briefing Strip (Redesigned Visual Approach) -->
-                <div id="briefing-strip" class="absolute top-4 left-4 right-4 md:right-auto md:w-96 bg-[#13161a]/90 border-2 border-gray-600 p-0 z-10 text-xs font-mono shadow-lg">
-                    <!-- Header -->
-                    <div class="bg-gray-800 text-gray-300 px-2 py-1 flex justify-between items-center border-b border-gray-600">
-                        <span class="font-bold">BRIEFING STRIP // PROFILE VIEW</span>
-                        <button onclick="document.getElementById('briefing-strip').style.display='none'" class="hover:text-white font-bold">[X]</button>
-                    </div>
-                    <!-- Content -->
-                    <div class="p-3 text-gray-300">
-                        <div class="flex justify-between mb-2 border-b border-gray-700 pb-2">
-                            <span>PILOT: <span class="text-white">HAORUI ZHOU</span></span>
-                            <span class="text-amber-400">RNP APCH</span>
+                        <!-- Taxiways -->
+                        <path d="M 350 320 L 350 450 L 200 450" fill="none" stroke="#ffc107" stroke-width="2" />
+                        <path d="M 450 280 L 450 150 L 600 150" fill="none" stroke="#ffc107" stroke-width="2" />
+
+                        <!-- Waypoints / Clickables -->
+                        <!-- Research Node -->
+                        <g onclick="switchView('research')" class="cursor-pointer group">
+                            <path d="M 600 150 L 610 165 L 590 165 Z" fill="#1e2329" stroke="#d63384" stroke-width="2"
+                                class="waypoint-hover" />
+                            <text x="600" y="140" text-anchor="middle" fill="#d63384" font-family="JetBrains Mono"
+                                font-size="10">RESEARCH</text>
+                            <text x="600" y="185" text-anchor="middle" fill="gray" font-family="JetBrains Mono"
+                                font-size="8" class="opacity-0 group-hover:opacity-100">MOBILITY LAB</text>
+                        </g>
+
+                        <!-- Projects Node -->
+                        <g onclick="switchView('projects')" class="cursor-pointer group">
+                            <path d="M 200 450 L 210 465 L 190 465 Z" fill="#1e2329" stroke="#00b4d8" stroke-width="2"
+                                class="waypoint-hover" />
+                            <text x="200" y="440" text-anchor="middle" fill="#00b4d8" font-family="JetBrains Mono"
+                                font-size="10">PROJECTS</text>
+                            <text x="200" y="485" text-anchor="middle" fill="gray" font-family="JetBrains Mono"
+                                font-size="8" class="opacity-0 group-hover:opacity-100">PECAN / ETL</text>
+                        </g>
+
+                        <!-- About: Terminal Building Icon (Relocated to Bottom Right to avoid overlap) -->
+                        <g onclick="switchView('logbook')" class="cursor-pointer group" transform="translate(680, 380)">
+                            <!-- Main Terminal Body -->
+                            <rect x="-20" y="-15" width="40" height="30" rx="2" fill="#1e2329" stroke="white"
+                                stroke-width="2" class="waypoint-hover" />
+                            <!-- Concourse Piers -->
+                            <rect x="-25" y="-5" width="10" height="10" fill="#1e2329" stroke="white"
+                                stroke-width="2" />
+                            <rect x="15" y="-5" width="10" height="10" fill="#1e2329" stroke="white" stroke-width="2" />
+                            <!-- Label -->
+                            <text x="0" y="-25" text-anchor="middle" fill="white" font-family="JetBrains Mono"
+                                font-size="10">ABOUT</text>
+                            <text x="0" y="25" text-anchor="middle" fill="gray" font-family="JetBrains Mono"
+                                font-size="8" class="opacity-0 group-hover:opacity-100">TERMINAL</text>
+                        </g>
+
+                        <!-- Data Block -->
+                        <g transform="translate(650, 500)">
+                            <rect x="0" y="0" width="120" height="60" fill="rgba(0,0,0,0.5)" stroke="white"
+                                stroke-width="1" />
+                            <text x="10" y="20" fill="white" font-family="JetBrains Mono" font-size="10">TWR
+                                119.700</text>
+                            <text x="10" y="35" fill="#ffc107" font-family="JetBrains Mono" font-size="10">ATIS: INFO
+                                Z</text>
+                            <text x="10" y="50" fill="#2ec4b6" font-family="JetBrains Mono" font-size="10">WIND
+                                270@10</text>
+                        </g>
+                    </svg>
+
+                    <!-- Briefing Strip (Redesigned Visual Approach) -->
+                    <div id="briefing-strip"
+                        class="absolute top-4 left-4 right-4 md:right-auto md:w-96 bg-[#13161a]/90 border-2 border-gray-600 p-0 z-10 text-xs font-mono shadow-lg">
+                        <!-- Header -->
+                        <div
+                            class="bg-gray-800 text-gray-300 px-2 py-1 flex justify-between items-center border-b border-gray-600">
+                            <span class="font-bold">BRIEFING STRIP // PROFILE VIEW</span>
+                            <button onclick="document.getElementById('briefing-strip').style.display='none'"
+                                class="hover:text-white font-bold">[X]</button>
                         </div>
-                        <p class="mb-3 leading-relaxed">
-                            Data Engineer specializing in real-time telemetry and cloud pipelines.
-                            Combining Python ETL, CAN-bus flows, and GIS analytics.
-                        </p>
-                        <div class="flex gap-2">
-                            <button onclick="switchView('research')" class="border border-gray-500 px-2 py-1 hover:bg-gray-700 hover:text-amber-400 transition text-[10px]">
-                                > RESEARCH
-                            </button>
-                            <button onclick="switchView('projects')" class="border border-gray-500 px-2 py-1 hover:bg-gray-700 hover:text-blue-400 transition text-[10px]">
-                                > PROJECTS
-                            </button>
+                        <!-- Content -->
+                        <div class="p-3 text-gray-300">
+                            <div class="flex justify-between mb-2 border-b border-gray-700 pb-2">
+                                <span>PILOT: <span class="text-white">HAORUI ZHOU</span></span>
+                                <span class="text-amber-400">RNP APCH</span>
+                            </div>
+                            <p class="mb-3 leading-relaxed">
+                                Data Engineer specializing in real-time telemetry and cloud pipelines.
+                                Combining Python ETL, CAN-bus flows, and GIS analytics.
+                            </p>
+                            <div class="flex gap-2">
+                                <button onclick="switchView('research')"
+                                    class="border border-gray-500 px-2 py-1 hover:bg-gray-700 hover:text-amber-400 transition text-[10px]">
+                                    > RESEARCH
+                                </button>
+                                <button onclick="switchView('projects')"
+                                    class="border border-gray-500 px-2 py-1 hover:bg-gray-700 hover:text-blue-400 transition text-[10px]">
+                                    > PROJECTS
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- SECTION: RESEARCH (GIS/ML) -->
-        <section id="research" class="hidden p-8 max-w-5xl mx-auto">
-            <!-- Dynamic Content Loaded via JS -->
-        </section>
+            <!-- SECTION: RESEARCH (GIS/ML) -->
+            <section id="research" class="hidden p-8 max-w-5xl mx-auto">
+                <!-- Dynamic Content Loaded via JS -->
+            </section>
 
-        <!-- SECTION: LOGBOOK (Experience) -->
-        <section id="logbook" class="hidden p-8 max-w-5xl mx-auto">
-            <!-- Dynamic Content Loaded via JS -->
-        </section>
+            <!-- SECTION: LOGBOOK (Experience) -->
+            <section id="logbook" class="hidden p-8 max-w-5xl mx-auto">
+                <!-- Dynamic Content Loaded via JS -->
+            </section>
 
-        <!-- SECTION: PROJECTS -->
-        <section id="projects" class="hidden p-8 max-w-5xl mx-auto">
-            <div class="flex items-center gap-4 mb-8 border-b border-gray-700 pb-4">
-                <div class="w-12 h-12 rounded-full bg-blue-900/30 flex items-center justify-center border border-blue-500 text-blue-500">
-                    <i data-lucide="layers" class="w-6 h-6"></i>
-                </div>
-                <div>
-                    <h2 class="text-2xl font-bold font-mono">TECHNICAL PROJECTS</h2>
-                    <p class="text-gray-400 font-mono text-sm">MISSION LOGS // CLICK TO EXPAND</p>
-                </div>
-            </div>
-
-            <div id="projects-grid" class="grid md:grid-cols-3 gap-4">
-                <!-- Dynamic Projects Loaded Here -->
-            </div>
-        </section>
-
-        <!-- SECTION: COMMS -->
-        <section id="comms" class="hidden p-8 h-full flex flex-col justify-center items-center">
-            <div class="bg-[#1a1f26] border border-gray-700 p-8 rounded-lg max-w-lg w-full text-center">
-                <i data-lucide="radio-tower" class="w-16 h-16 text-amber-400 mx-auto mb-6"></i>
-                <h2 class="text-2xl font-bold font-mono mb-2">ESTABLISH COMMS</h2>
-                <p class="text-gray-400 mb-6">Frequency 121.5 is monitored. Squawk 7700 for immediate attention.</p>
-
-                <div class="space-y-3 font-mono text-sm text-left inline-block w-full">
-                    <a href="mailto:haorui2002@gmail.com" class="block p-3 bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded flex justify-between items-center group">
-                        <span>EMAIL_UPLINK</span>
-                        <span class="text-blue-400 group-hover:text-white">haorui2002@gmail.com</span>
-                    </a>
-                    <a href="https://haorui-zhou.super.site" target="_blank" class="block p-3 bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded flex justify-between items-center group">
-                        <span>WEBSITE_VECTOR</span>
-                        <span class="text-blue-400 group-hover:text-white">haorui-zhou.super.site</span>
-                    </a>
-                    <div class="block p-3 bg-gray-800 border border-gray-600 rounded flex justify-between items-center">
-                        <span>PHONE_LINE</span>
-                        <span class="text-gray-400">REDACTED</span>
+            <!-- SECTION: PROJECTS -->
+            <section id="projects" class="hidden p-8 max-w-5xl mx-auto">
+                <div class="flex items-center gap-4 mb-8 border-b border-gray-700 pb-4">
+                    <div
+                        class="w-12 h-12 rounded-full bg-blue-900/30 flex items-center justify-center border border-blue-500 text-blue-500">
+                        <i data-lucide="layers" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold font-mono">TECHNICAL PROJECTS</h2>
+                        <p class="text-gray-400 font-mono text-sm">MISSION LOGS // CLICK TO EXPAND</p>
                     </div>
                 </div>
-                <p class="mt-6 text-xs text-gray-600 font-mono italic">
-                    "To fellow aviators: hope you appreciate the domain 0001200. Squawking VFR."
-                </p>
-            </div>
-        </section>
-    </div>
-</main>
 
-<!-- PROJECT MODAL (Hidden by default) -->
-<div id="project-modal" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onclick="closeProjectModal(event)">
-    <div class="w-full max-w-3xl bg-[#13161a] border-2 border-gray-600 shadow-2xl flex flex-col max-h-[90vh]" onclick="event.stopPropagation()">
-        <!-- Modal Header -->
-        <div class="bg-gray-800 p-3 border-b border-gray-600 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
-                <h2 class="text-amber-400 font-mono font-bold text-sm tracking-wider">MISSION REPORT // TECH LOG</h2>
-            </div>
-            <button onclick="closeProjectModal()" class="text-xs font-mono bg-gray-700 hover:bg-red-900 text-white px-2 py-1 rounded border border-gray-500 hover:border-red-500 transition">
-                [ ACKNOWLEDGE ]
-            </button>
+                <div id="projects-grid" class="grid md:grid-cols-3 gap-4">
+                    <!-- Dynamic Projects Loaded Here -->
+                </div>
+            </section>
+
+            <!-- SECTION: COMMS -->
+            <section id="comms" class="hidden p-8 h-full flex flex-col justify-center items-center">
+                <div class="bg-[#1a1f26] border border-gray-700 p-8 rounded-lg max-w-lg w-full text-center">
+                    <i data-lucide="radio-tower" class="w-16 h-16 text-amber-400 mx-auto mb-6"></i>
+                    <h2 class="text-2xl font-bold font-mono mb-2">ESTABLISH COMMS</h2>
+                    <p class="text-gray-400 mb-6">Frequency 121.5 is monitored. Squawk 7700 for immediate attention.</p>
+
+                    <div class="space-y-3 font-mono text-sm text-left inline-block w-full">
+                        <a href="mailto:haorui2002@gmail.com"
+                            class="block p-3 bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded flex justify-between items-center group">
+                            <span>EMAIL_UPLINK</span>
+                            <span class="text-blue-400 group-hover:text-white">haorui2002@gmail.com</span>
+                        </a>
+                        <a href="https://haorui-zhou.super.site" target="_blank"
+                            class="block p-3 bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded flex justify-between items-center group">
+                            <span>WEBSITE_VECTOR</span>
+                            <span class="text-blue-400 group-hover:text-white">haorui-zhou.super.site</span>
+                        </a>
+                        <a href="content/Haorui_Zhou_Resume.pdf" download
+                            class="block p-3 bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded flex justify-between items-center group">
+                            <span>RESUME_DOWNLOAD</span>
+                            <span class="text-amber-400 group-hover:text-white flex items-center gap-2">
+                                <i data-lucide="download" class="w-4 h-4"></i>
+                                PDF
+                            </span>
+                        </a>
+                        <div
+                            class="block p-3 bg-gray-800 border border-gray-600 rounded flex justify-between items-center">
+                            <span>PHONE_LINE</span>
+                            <span class="text-gray-400">REDACTED</span>
+                        </div>
+                    </div>
+                    <p class="mt-6 text-xs text-gray-600 font-mono italic">
+                        "To fellow aviators: hope you appreciate the domain 0001200. Squawking VFR."
+                    </p>
+                </div>
+            </section>
         </div>
+    </main>
 
-        <!-- Modal Content -->
-        <div class="p-8 overflow-y-auto font-mono text-sm">
-            <div id="modal-content" class="prose prose-invert max-w-none">
-                <!-- Dynamic Content Injected Here -->
+    <!-- PROJECT MODAL (Hidden by default) -->
+    <div id="project-modal"
+        class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+        onclick="closeProjectModal(event)">
+        <div class="w-full max-w-3xl bg-[#13161a] border-2 border-gray-600 shadow-2xl flex flex-col max-h-[90vh]"
+            onclick="event.stopPropagation()">
+            <!-- Modal Header -->
+            <div class="bg-gray-800 p-3 border-b border-gray-600 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
+                    <h2 class="text-amber-400 font-mono font-bold text-sm tracking-wider">MISSION REPORT // TECH LOG
+                    </h2>
+                </div>
+                <button onclick="closeProjectModal()"
+                    class="text-xs font-mono bg-gray-700 hover:bg-red-900 text-white px-2 py-1 rounded border border-gray-500 hover:border-red-500 transition">
+                    [ ACKNOWLEDGE ]
+                </button>
+            </div>
+
+            <!-- Modal Content -->
+            <div class="p-8 overflow-y-auto font-mono text-sm">
+                <div id="modal-content" class="prose prose-invert max-w-none">
+                    <!-- Dynamic Content Injected Here -->
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-3 border-t border-gray-700 bg-[#0f1115] text-xs text-gray-500 font-mono flex justify-between">
+                <span>RECORDED BY: HAORUI ZHOU</span>
+                <span>STATUS: DECLASSIFIED</span>
             </div>
         </div>
+    </div>
 
-        <!-- Modal Footer -->
-        <div class="p-3 border-t border-gray-700 bg-[#0f1115] text-xs text-gray-500 font-mono flex justify-between">
-            <span>RECORDED BY: HAORUI ZHOU</span>
-            <span>STATUS: DECLASSIFIED</span>
+    <!-- Bottom Footer: METAR Ticker -->
+    <footer
+        class="fixed bottom-0 w-full bg-[#0f1115] border-t border-gray-800 h-8 flex items-center overflow-hidden z-50">
+        <div class="whitespace-nowrap animate-marquee text-xs font-mono text-amber-400 px-4 flex gap-8">
+            <span id="metar-string">METAR CYXU 212055Z 27010KT 10SM CLR 15/10 A2992 RMK PYTHON_EXPERT CANBUS_READY
+                TELEMETRY_ACTIVE TC_FAA_PILOT</span>
+            <span class="text-gray-500">NOTAM: DATA PIPELINE DEPLOYED 2025</span>
+            <span class="text-blue-400">INFO: CAUSAL ANALYTICS READY</span>
+            <!-- Duplicate for infinite scroll illusion -->
+            <span class="text-amber-400">METAR KSBA 212055Z 27010KT 10SM CLR 15/10 A2992 RMK PYTHON_EXPERT CANBUS_READY
+                TELEMETRY_ACTIVE TC_FAA_PILOT</span>
         </div>
-    </div>
-</div>
+    </footer>
 
-<!-- Bottom Footer: METAR Ticker -->
-<footer class="fixed bottom-0 w-full bg-[#0f1115] border-t border-gray-800 h-8 flex items-center overflow-hidden z-50">
-    <div class="whitespace-nowrap animate-marquee text-xs font-mono text-amber-400 px-4 flex gap-8">
-        <span id="metar-string">METAR CYXU 212055Z 27010KT 10SM CLR 15/10 A2992 RMK PYTHON_EXPERT CANBUS_READY TELEMETRY_ACTIVE TC_FAA_PILOT</span>
-        <span class="text-gray-500">NOTAM: DATA PIPELINE DEPLOYED 2025</span>
-        <span class="text-blue-400">INFO: CAUSAL ANALYTICS READY</span>
-        <!-- Duplicate for infinite scroll illusion -->
-        <span class="text-amber-400">METAR KSBA 212055Z 27010KT 10SM CLR 15/10 A2992 RMK PYTHON_EXPERT CANBUS_READY TELEMETRY_ACTIVE TC_FAA_PILOT</span>
-    </div>
-</footer>
-
-<style>
-    @keyframes marquee {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
-    }
-    .animate-marquee {
-        animation: marquee 20s linear infinite;
-    }
-</style>
-
-<script>
-    // Define functions globally so they are accessible from onclick handlers
-    let switchView, toggleMenu, openProjectModal, closeProjectModal;
-
-    window.addEventListener('DOMContentLoaded', (event) => {
-
-        // Initialize Lucide Icons Safely
-        try {
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
+    <style>
+        @keyframes marquee {
+            0% {
+                transform: translateX(0);
             }
-        } catch (e) {
-            console.warn("Lucide icons failed to load:", e);
+
+            100% {
+                transform: translateX(-50%);
+            }
         }
 
-        // Load Projects from Manifest
-        async function loadProjects() {
-            const grid = document.getElementById('projects-grid');
-            if (!grid) return;
+        .animate-marquee {
+            animation: marquee 20s linear infinite;
+        }
+    </style>
 
+    <script>
+        // Define functions globally so they are accessible from onclick handlers
+        let switchView, toggleMenu, openProjectModal, closeProjectModal;
+
+        window.addEventListener('DOMContentLoaded', (event) => {
+
+            // Initialize Lucide Icons Safely
             try {
-                const response = await fetch('content/projects_manifest.json');
-                if (!response.ok) throw new Error('Failed to load projects manifest');
-                const projects = await response.json();
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            } catch (e) {
+                console.warn("Lucide icons failed to load:", e);
+            }
 
-                grid.innerHTML = projects.map(p => {
-                    // Theme Colors Mapping
-                    const colors = {
-                        blue: { border: 'border-blue-500', text: 'text-blue-400', hover: 'group-hover:text-blue-400', bg: 'bg-blue-900/50', btnText: 'text-blue-300', btnBorder: 'border-blue-800', btnHover: 'group-hover:bg-blue-600' },
-                        green: { border: 'border-green-500', text: 'text-green-400', hover: 'group-hover:text-green-400', bg: 'bg-green-900/50', btnText: 'text-green-300', btnBorder: 'border-green-800', btnHover: 'group-hover:bg-green-600' },
-                        amber: { border: 'border-amber-500', text: 'text-amber-400', hover: 'group-hover:text-amber-400', bg: 'bg-amber-900/50', btnText: 'text-amber-300', btnBorder: 'border-amber-800', btnHover: 'group-hover:bg-amber-600' }
-                    };
-                    
-                    // Check if theme is a hex color or predefined
-                    let isHex = p.theme && p.theme.startsWith('#');
-                    let theme = isHex ? {
-                        border: `border-[${p.theme}]`,
-                        text: `text-[${p.theme}]`,
-                        hover: `group-hover:text-[${p.theme}]`,
-                        bg: `bg-[${p.theme}]/20`,
-                        btnText: `text-[${p.theme}]`,
-                        btnBorder: `border-[${p.theme}]/50`,
-                        btnHover: `group-hover:bg-[${p.theme}]`
-                    } : (p.theme && colors[p.theme] ? colors[p.theme] : colors['blue']);
+            // Load Projects from Manifest
+            async function loadProjects() {
+                const grid = document.getElementById('projects-grid');
+                if (!grid) return;
 
-                    return `
+                try {
+                    const response = await fetch('content/projects_manifest.json');
+                    if (!response.ok) throw new Error('Failed to load projects manifest');
+                    const projects = await response.json();
+
+                    grid.innerHTML = projects.map(p => {
+                        // Theme Colors Mapping
+                        const colors = {
+                            blue: { border: 'border-blue-500', text: 'text-blue-400', hover: 'group-hover:text-blue-400', bg: 'bg-blue-900/50', btnText: 'text-blue-300', btnBorder: 'border-blue-800', btnHover: 'group-hover:bg-blue-600' },
+                            green: { border: 'border-green-500', text: 'text-green-400', hover: 'group-hover:text-green-400', bg: 'bg-green-900/50', btnText: 'text-green-300', btnBorder: 'border-green-800', btnHover: 'group-hover:bg-green-600' },
+                            amber: { border: 'border-amber-500', text: 'text-amber-400', hover: 'group-hover:text-amber-400', bg: 'bg-amber-900/50', btnText: 'text-amber-300', btnBorder: 'border-amber-800', btnHover: 'group-hover:bg-amber-600' }
+                        };
+
+                        // Check if theme is a hex color or predefined
+                        let isHex = p.theme && p.theme.startsWith('#');
+                        let theme = isHex ? {
+                            border: `border-[${p.theme}]`,
+                            text: `text-[${p.theme}]`,
+                            hover: `group-hover:text-[${p.theme}]`,
+                            bg: `bg-[${p.theme}]/20`,
+                            btnText: `text-[${p.theme}]`,
+                            btnBorder: `border-[${p.theme}]/50`,
+                            btnHover: `group-hover:bg-[${p.theme}]`
+                        } : (p.theme && colors[p.theme] ? colors[p.theme] : colors['blue']);
+
+                        return `
                     <div class="bg-gray-900 border-l-4 ${theme.border} p-4 cursor-pointer hover:bg-gray-800 transition group flex flex-col h-full relative" onclick="openProjectModal('${p.id}')">
                         <div class="flex justify-between items-start">
                             <h4 class="font-bold text-white font-mono mb-2 ${theme.hover}">${p.title}</h4>
@@ -589,189 +694,190 @@
                         </div>
                     </div>
                     `;
-                }).join('');
+                    }).join('');
 
-                // Re-init icons for new elements
-                if (typeof lucide !== 'undefined') {
-                    lucide.createIcons();
+                    // Re-init icons for new elements
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
+                    }
+
+                } catch (error) {
+                    console.error("Project Load Error:", error);
+                    grid.innerHTML = `<div class="text-red-500 col-span-3 text-center">SYSTEM ERROR: PROJECT MANIFEST UNREACHABLE</div>`;
                 }
-
-            } catch (error) {
-                console.error("Project Load Error:", error);
-                grid.innerHTML = `<div class="text-red-500 col-span-3 text-center">SYSTEM ERROR: PROJECT MANIFEST UNREACHABLE</div>`;
             }
-        }
 
-        // Load Section Content from MD
-        async function loadSectionContent(sectionId) {
-            const section = document.getElementById(sectionId);
-            if (!section) return;
-            
-            try {
-                const response = await fetch(`content/${sectionId}.md`);
-                if (!response.ok) throw new Error(`Failed to load ${sectionId}`);
-                const text = await response.text();
-                
-                 // Parse Markdown (allows HTML)
-                if (typeof marked !== 'undefined') {
-                     section.innerHTML = marked.parse(text);
-                } else {
-                     section.innerHTML = text;
-                }
-                
-                // Re-initialize icons for the new content
-                 if (typeof lucide !== 'undefined') {
-                    lucide.createIcons();
-                }
+            // Load Section Content from MD
+            async function loadSectionContent(sectionId) {
+                const section = document.getElementById(sectionId);
+                if (!section) return;
 
-            } catch (error) {
-                console.error(error);
-                section.innerHTML = `<div class="text-red-500">FAILED TO LOAD CONTENT</div>`;
+                try {
+                    const response = await fetch(`content/${sectionId}.md`);
+                    if (!response.ok) throw new Error(`Failed to load ${sectionId}`);
+                    const text = await response.text();
+
+                    // Parse Markdown (allows HTML)
+                    if (typeof marked !== 'undefined') {
+                        section.innerHTML = marked.parse(text);
+                    } else {
+                        section.innerHTML = text;
+                    }
+
+                    // Re-initialize icons for the new content
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
+                    }
+
+                } catch (error) {
+                    console.error(error);
+                    section.innerHTML = `<div class="text-red-500">FAILED TO LOAD CONTENT</div>`;
+                }
             }
-        }
 
-        // Initialize Sections
-        loadSectionContent('research');
-        loadSectionContent('logbook');
-        loadProjects();
+            // Initialize Sections
+            loadSectionContent('research');
+            loadSectionContent('logbook');
+            loadProjects();
 
-        // Zulu Clock
-        function updateTime() {
-            const now = new Date();
-            const timeString = now.toISOString().split('T')[1].split('.')[0] + 'Z';
-            const clockEl = document.getElementById('zulu-clock');
-            if(clockEl) clockEl.innerText = timeString;
-        }
-        setInterval(updateTime, 1000);
-        updateTime();
+            // Zulu Clock
+            function updateTime() {
+                const now = new Date();
+                const timeString = now.toISOString().split('T')[1].split('.')[0] + 'Z';
+                const clockEl = document.getElementById('zulu-clock');
+                if (clockEl) clockEl.innerText = timeString;
+            }
+            setInterval(updateTime, 1000);
+            updateTime();
 
-        // Navigation Logic
-        switchView = function(viewId) {
-            // Hide all sections
-            const sections = ['chart', 'research', 'logbook', 'projects', 'comms'];
-            sections.forEach(s => {
-                const el = document.getElementById(s);
-                if(el) el.classList.add('hidden');
-            });
+            // Navigation Logic
+            switchView = function (viewId) {
+                // Hide all sections
+                const sections = ['chart', 'research', 'logbook', 'projects', 'comms'];
+                sections.forEach(s => {
+                    const el = document.getElementById(s);
+                    if (el) el.classList.add('hidden');
+                });
 
-            // Show selected
-            const selectedEl = document.getElementById(viewId);
-            if(selectedEl) selectedEl.classList.remove('hidden');
+                // Show selected
+                const selectedEl = document.getElementById(viewId);
+                if (selectedEl) selectedEl.classList.remove('hidden');
 
-            // Update sidebar active state
-            const navButtons = document.querySelectorAll('nav button');
-            navButtons.forEach(btn => {
-                btn.classList.remove('bg-gray-800/50', 'border-l-4', 'border-l-amber-400', 'active-nav');
-                if(btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(viewId)) {
-                    btn.classList.add('bg-gray-800/50', 'border-l-4', 'border-l-amber-400', 'active-nav');
+                // Update sidebar active state
+                const navButtons = document.querySelectorAll('nav button');
+                navButtons.forEach(btn => {
+                    btn.classList.remove('bg-gray-800/50', 'border-l-4', 'border-l-amber-400', 'active-nav');
+                    if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(viewId)) {
+                        btn.classList.add('bg-gray-800/50', 'border-l-4', 'border-l-amber-400', 'active-nav');
+                    }
+                });
+
+                // Mobile: Close menu after click
+                if (window.innerWidth < 768) {
+                    const sidebar = document.getElementById('sidebar');
+                    if (sidebar) sidebar.classList.add('-translate-x-full');
                 }
-            });
+            }
 
-            // Mobile: Close menu after click
-            if (window.innerWidth < 768) {
+            toggleMenu = function () {
                 const sidebar = document.getElementById('sidebar');
-                if(sidebar) sidebar.classList.add('-translate-x-full');
+                if (sidebar) sidebar.classList.toggle('-translate-x-full');
             }
-        }
 
-        toggleMenu = function() {
-            const sidebar = document.getElementById('sidebar');
-            if(sidebar) sidebar.classList.toggle('-translate-x-full');
-        }
+            // Coordinate update simulation (just for fun visual effect)
+            setInterval(() => {
+                // Coordinates for London, ON
+                const latBase = 42.98;
+                const lonBase = 81.24;
+                const jitterLat = (Math.random() * 0.0001).toFixed(4);
+                const jitterLon = (Math.random() * 0.0001).toFixed(4);
+                const latEl = document.getElementById('lat');
+                const lonEl = document.getElementById('lon');
+                if (latEl) latEl.innerText = (latBase + parseFloat(jitterLat)).toFixed(4) + "N";
+                if (lonEl) lonEl.innerText = (lonBase + parseFloat(jitterLon)).toFixed(4) + "W";
+            }, 3000);
 
-        // Coordinate update simulation (just for fun visual effect)
-        setInterval(() => {
-            // Coordinates for London, ON
-            const latBase = 42.98;
-            const lonBase = 81.24;
-            const jitterLat = (Math.random() * 0.0001).toFixed(4);
-            const jitterLon = (Math.random() * 0.0001).toFixed(4);
-            const latEl = document.getElementById('lat');
-            const lonEl = document.getElementById('lon');
-            if(latEl) latEl.innerText = (latBase + parseFloat(jitterLat)).toFixed(4) + "N";
-            if(lonEl) lonEl.innerText = (lonBase + parseFloat(jitterLon)).toFixed(4) + "W";
-        }, 3000);
+            // Dynamic METAR Date
+            const date = new Date();
+            const day = date.getDate().toString().padStart(2, '0');
+            const hour = date.getUTCHours().toString().padStart(2, '0');
+            const min = date.getUTCMinutes().toString().padStart(2, '0');
+            const metarTime = `${day}${hour}${min}Z`;
 
-        // Dynamic METAR Date
-        const date = new Date();
-        const day = date.getDate().toString().padStart(2, '0');
-        const hour = date.getUTCHours().toString().padStart(2, '0');
-        const min = date.getUTCMinutes().toString().padStart(2, '0');
-        const metarTime = `${day}${hour}${min}Z`;
+            const metarString = `METAR CYXU ${metarTime} 09005KT CAVOK 25/15 Q1013 RMK DATA_ENG TELEMETRY_SPEC PYTHON_DEV`;
+            const metarEl = document.getElementById('metar-string');
+            if (metarEl) metarEl.innerText = metarString;
 
-        const metarString = `METAR CYXU ${metarTime} 09005KT CAVOK 25/15 Q1013 RMK DATA_ENG TELEMETRY_SPEC PYTHON_DEV`;
-        const metarEl = document.getElementById('metar-string');
-        if(metarEl) metarEl.innerText = metarString;
+            // --- MODAL LOGIC --- //
 
-        // --- MODAL LOGIC --- //
+            // Track loaded scripts to avoid duplicates
+            const loadedScripts = new Set();
 
-        // Track loaded scripts to avoid duplicates
-        const loadedScripts = new Set();
+            // Dynamic script loader
+            function loadProjectScript(projectId) {
+                return new Promise((resolve, reject) => {
+                    // Check if script already loaded
+                    if (loadedScripts.has(projectId)) {
+                        resolve();
+                        return;
+                    }
 
-        // Dynamic script loader
-        function loadProjectScript(projectId) {
-            return new Promise((resolve, reject) => {
-                // Check if script already loaded
-                if (loadedScripts.has(projectId)) {
-                    resolve();
-                    return;
-                }
-
-                const script = document.createElement('script');
-                script.src = `scripts/${projectId}.js`;
-                script.onload = () => {
-                    loadedScripts.add(projectId);
-                    resolve();
-                };
-                script.onerror = () => {
-                    console.warn(`[Script Loader] Optional script not found: ${projectId}.js`);
-                    resolve(); // Don't fail if script doesn't exist
-                };
-                document.head.appendChild(script);
-            });
-        }
-
-        openProjectModal = async function(projectId) {
-            const modal = document.getElementById('project-modal');
-            const contentDiv = document.getElementById('modal-content');
-
-            if (!modal || !contentDiv) return;
-            
-            // Show loading state
-            modal.classList.remove('hidden');
-            contentDiv.innerHTML = '<div class="text-amber-400 font-mono animate-pulse">LOADING MISSION DATA...</div>';
-
-            try {
-                // Load content and script in parallel
-                const [response] = await Promise.all([
-                    fetch(`content/projects/${projectId}.md`),
-                    loadProjectScript(projectId)
-                ]);
-                
-                if (!response.ok) throw new Error('Failed to load mission log');
-                const text = await response.text();
-                
-                // Parse Markdown (allows HTML)
-                if (typeof marked !== 'undefined') {
-                     contentDiv.innerHTML = marked.parse(text);
-                } else {
-                     contentDiv.innerHTML = text;
-                }
-
-            } catch (error) {
-                contentDiv.innerHTML = `<div class="text-red-500 font-mono">ERROR: DATA CORRUPTED [${error.message}]</div>`;
+                    const script = document.createElement('script');
+                    script.src = `scripts/${projectId}.js`;
+                    script.onload = () => {
+                        loadedScripts.add(projectId);
+                        resolve();
+                    };
+                    script.onerror = () => {
+                        console.warn(`[Script Loader] Optional script not found: ${projectId}.js`);
+                        resolve(); // Don't fail if script doesn't exist
+                    };
+                    document.head.appendChild(script);
+                });
             }
-        }
 
-        closeProjectModal = function(event) {
-            // If event is passed (click outside), close. If no event (button click), close.
-            if (!event || event.target.id === 'project-modal') {
+            openProjectModal = async function (projectId) {
                 const modal = document.getElementById('project-modal');
-                if(modal) modal.classList.add('hidden');
-            }
-        }
+                const contentDiv = document.getElementById('modal-content');
 
-    });
-</script>
+                if (!modal || !contentDiv) return;
+
+                // Show loading state
+                modal.classList.remove('hidden');
+                contentDiv.innerHTML = '<div class="text-amber-400 font-mono animate-pulse">LOADING MISSION DATA...</div>';
+
+                try {
+                    // Load content and script in parallel
+                    const [response] = await Promise.all([
+                        fetch(`content/projects/${projectId}.md`),
+                        loadProjectScript(projectId)
+                    ]);
+
+                    if (!response.ok) throw new Error('Failed to load mission log');
+                    const text = await response.text();
+
+                    // Parse Markdown (allows HTML)
+                    if (typeof marked !== 'undefined') {
+                        contentDiv.innerHTML = marked.parse(text);
+                    } else {
+                        contentDiv.innerHTML = text;
+                    }
+
+                } catch (error) {
+                    contentDiv.innerHTML = `<div class="text-red-500 font-mono">ERROR: DATA CORRUPTED [${error.message}]</div>`;
+                }
+            }
+
+            closeProjectModal = function (event) {
+                // If event is passed (click outside), close. If no event (button click), close.
+                if (!event || event.target.id === 'project-modal') {
+                    const modal = document.getElementById('project-modal');
+                    if (modal) modal.classList.add('hidden');
+                }
+            }
+
+        });
+    </script>
 </body>
+
 </html>
