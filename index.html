@@ -921,8 +921,14 @@
             }
 
             toggleMenu = function () {
-                const sidebar = document.getElementById('sidebar');
-                if (sidebar) sidebar.classList.toggle('-translate-x-full');
+                if (window.innerWidth >= 768) {
+                    // Desktop: go back to chart view
+                    switchView('chart');
+                } else {
+                    // Mobile: toggle sidebar
+                    const sidebar = document.getElementById('sidebar');
+                    if (sidebar) sidebar.classList.toggle('-translate-x-full');
+                }
             }
 
             // Coordinate update simulation (just for fun visual effect)
