@@ -187,28 +187,105 @@
             animation: radar-spin 6s linear 1 forwards;
         }
 
-        /* Plane Fly-in */
-        @keyframes approach-07 {
+        /* Plane Full Journey - Taxi to GitHub Hangar */
+        @keyframes taxi-github {
             0% {
                 transform: translate(-200px, 400px) rotate(-10deg) scale(0.5);
                 opacity: 0;
             }
 
-            10% {
+            8% {
                 opacity: 1;
             }
 
-            100% {
+            /* Touch down on runway */
+            35% {
                 transform: translate(300px, 320px) rotate(-10deg) scale(1);
+                opacity: 1;
+            }
+
+            /* Roll out, slow down */
+            45% {
+                transform: translate(350px, 312px) rotate(-10deg) scale(1);
+            }
+
+            /* Turn onto taxiway (heading south) */
+            55% {
+                transform: translate(350px, 350px) rotate(80deg) scale(0.9);
+            }
+
+            /* Taxi south on taxiway */
+            70% {
+                transform: translate(350px, 400px) rotate(80deg) scale(0.85);
+            }
+
+            /* Turn west toward hangar */
+            80% {
+                transform: translate(250px, 380px) rotate(180deg) scale(0.8);
+            }
+
+            /* Arrive at GitHub hangar */
+            100% {
+                transform: translate(150px, 350px) rotate(180deg) scale(0.7);
+                opacity: 1;
+            }
+        }
+
+        /* Plane Full Journey - Taxi to LinkedIn Hangar */
+        @keyframes taxi-linkedin {
+            0% {
+                transform: translate(-200px, 400px) rotate(-10deg) scale(0.5);
+                opacity: 0;
+            }
+
+            8% {
+                opacity: 1;
+            }
+
+            /* Touch down on runway */
+            35% {
+                transform: translate(300px, 320px) rotate(-10deg) scale(1);
+                opacity: 1;
+            }
+
+            /* Roll out, slow down */
+            45% {
+                transform: translate(350px, 312px) rotate(-10deg) scale(1);
+            }
+
+            /* Turn onto taxiway (heading south) */
+            55% {
+                transform: translate(350px, 370px) rotate(80deg) scale(0.9);
+            }
+
+            /* Taxi south on taxiway */
+            70% {
+                transform: translate(350px, 450px) rotate(80deg) scale(0.85);
+            }
+
+            /* Turn west toward hangar */
+            80% {
+                transform: translate(250px, 450px) rotate(180deg) scale(0.8);
+            }
+
+            /* Arrive at LinkedIn hangar */
+            100% {
+                transform: translate(150px, 430px) rotate(180deg) scale(0.7);
                 opacity: 1;
             }
         }
 
         .plane-icon {
-            /* Initial state off-screen/hidden if needed, or handled by animation */
-            animation: approach-07 6s ease-out forwards;
             transform-box: fill-box;
             transform-origin: center;
+        }
+
+        .plane-icon.taxi-github {
+            animation: taxi-github 13s ease-in-out forwards;
+        }
+
+        .plane-icon.taxi-linkedin {
+            animation: taxi-linkedin 13s ease-in-out forwards;
         }
     </style>
 </head>
@@ -404,13 +481,6 @@
                                 transform="rotate(-90, 160, 0)">25</text>
                         </g>
 
-                        <!-- ANIMATED AIRPLANE ON APPROACH -->
-                        <g class="plane-icon">
-                            <!-- Simple Plane Shape pointing right -->
-                            <path d="M 0 0 L -10 10 L 20 0 L -10 -10 Z" fill="#ffc107" stroke="none" />
-                            <!-- Strobe Light -->
-                            <circle cx="0" cy="0" r="2" fill="white" class="blink" />
-                        </g>
 
                         <!-- Taxiways -->
                         <path d="M 350 320 L 350 450 L 200 450" fill="none" stroke="#ffc107" stroke-width="2" />
@@ -434,10 +504,10 @@
                             <text x="200" y="440" text-anchor="middle" fill="#00b4d8" font-family="JetBrains Mono"
                                 font-size="10">PROJECTS</text>
                             <text x="200" y="485" text-anchor="middle" fill="gray" font-family="JetBrains Mono"
-                                font-size="8" class="opacity-0 group-hover:opacity-100">PECAN / ETL</text>
+                                font-size="8" class="opacity-0 group-hover:opacity-100">PROJECTS GALLERY</text>
                         </g>
 
-                        <!-- About: Terminal Building Icon (Relocated to Bottom Right to avoid overlap) -->
+                        <!-- Logbook: Terminal Building Icon (Bottom Right) -->
                         <g onclick="switchView('logbook')" class="cursor-pointer group" transform="translate(680, 380)">
                             <!-- Main Terminal Body -->
                             <rect x="-20" y="-15" width="40" height="30" rx="2" fill="#1e2329" stroke="white"
@@ -448,13 +518,77 @@
                             <rect x="15" y="-5" width="10" height="10" fill="#1e2329" stroke="white" stroke-width="2" />
                             <!-- Label -->
                             <text x="0" y="-25" text-anchor="middle" fill="white" font-family="JetBrains Mono"
-                                font-size="10">ABOUT</text>
+                                font-size="10">LOGBOOK</text>
                             <text x="0" y="25" text-anchor="middle" fill="gray" font-family="JetBrains Mono"
-                                font-size="8" class="opacity-0 group-hover:opacity-100">TERMINAL</text>
+                                font-size="8" class="opacity-0 group-hover:opacity-100">EXPERIENCE</text>
+                        </g>
+
+                        <!-- HANGARS: Social Links as Airport Buildings -->
+                        <!-- GitHub Hangar -->
+                        <a href="https://github.com/haoruizhou" target="_blank" rel="noopener noreferrer">
+                            <g class="cursor-pointer group" transform="translate(120, 350)">
+                                <!-- Hangar Building - Quonset/Curved Roof Style -->
+                                <path d="M -25 20 L -25 0 Q -25 -20 0 -20 Q 25 -20 25 0 L 25 20 Z" fill="#1e2329"
+                                    stroke="#6e5494" stroke-width="2"
+                                    class="group-hover:fill-[#6e5494]/20 transition-all duration-300" />
+                                <!-- Hangar Doors -->
+                                <rect x="-15" y="5" width="30" height="15" fill="#0f1115" stroke="#6e5494"
+                                    stroke-width="1" />
+                                <!-- GitHub Icon (simplified) -->
+                                <circle cx="0" cy="-5" r="6" fill="none" stroke="#6e5494" stroke-width="1.5"
+                                    class="group-hover:stroke-white transition-all duration-300" />
+                                <path d="M -2 -3 Q 0 0 2 -3" fill="none" stroke="#6e5494" stroke-width="1"
+                                    class="group-hover:stroke-white transition-all duration-300" />
+                                <!-- Label -->
+                                <text x="0" y="40" text-anchor="middle" fill="#6e5494" font-family="JetBrains Mono"
+                                    font-size="9"
+                                    class="group-hover:fill-white transition-all duration-300">GITHUB</text>
+                                <text x="0" y="50" text-anchor="middle" fill="gray" font-family="JetBrains Mono"
+                                    font-size="7"
+                                    class="opacity-0 group-hover:opacity-100 transition-all duration-300">HANGAR
+                                    A</text>
+                            </g>
+                        </a>
+
+                        <!-- LinkedIn Hangar -->
+                        <a href="https://www.linkedin.com/in/haoruizhou/" target="_blank" rel="noopener noreferrer">
+                            <g class="cursor-pointer group" transform="translate(120, 430)">
+                                <!-- Hangar Building - Quonset/Curved Roof Style -->
+                                <path d="M -25 20 L -25 0 Q -25 -20 0 -20 Q 25 -20 25 0 L 25 20 Z" fill="#1e2329"
+                                    stroke="#0a66c2" stroke-width="2"
+                                    class="group-hover:fill-[#0a66c2]/20 transition-all duration-300" />
+                                <!-- Hangar Doors -->
+                                <rect x="-15" y="5" width="30" height="15" fill="#0f1115" stroke="#0a66c2"
+                                    stroke-width="1" />
+                                <!-- LinkedIn Icon (simplified "in") -->
+                                <text x="0" y="0" text-anchor="middle" fill="#0a66c2" font-family="JetBrains Mono"
+                                    font-size="10" font-weight="bold"
+                                    class="group-hover:fill-white transition-all duration-300">in</text>
+                                <!-- Label -->
+                                <text x="0" y="40" text-anchor="middle" fill="#0a66c2" font-family="JetBrains Mono"
+                                    font-size="9"
+                                    class="group-hover:fill-white transition-all duration-300">LINKEDIN</text>
+                                <text x="0" y="50" text-anchor="middle" fill="gray" font-family="JetBrains Mono"
+                                    font-size="7"
+                                    class="opacity-0 group-hover:opacity-100 transition-all duration-300">HANGAR
+                                    B</text>
+                            </g>
+                        </a>
+
+                        <!-- ANIMATED AIRPLANE ON APPROACH (placed last to render on top) -->
+                        <g class="plane-icon">
+                            <!-- Cessna-style Light Aircraft (top-down view) -->
+                            <g transform="scale(1.2) rotate(90)">
+                                <path
+                                    d="M 0 -12 L 2 -8 L 2 -2 L 10 2 L 10 4 L 2 2 L 2 6 L 5 8 L 5 10 L 0 8 L -5 10 L -5 8 L -2 6 L -2 2 L -10 4 L -10 2 L -2 -2 L -2 -8 Z"
+                                    fill="#ffc107" stroke="#000" stroke-width="0.5" />
+                            </g>
+                            <!-- Strobe Light -->
+                            <circle cx="0" cy="0" r="2" fill="white" class="blink" />
                         </g>
 
                         <!-- Data Block -->
-                        <g transform="translate(650, 500)">
+                        <g transform="translate(650, 460)">
                             <rect x="0" y="0" width="120" height="60" fill="rgba(0,0,0,0.5)" stroke="white"
                                 stroke-width="1" />
                             <text x="10" y="20" fill="white" font-family="JetBrains Mono" font-size="10">TWR
@@ -646,6 +780,13 @@
                 }
             } catch (e) {
                 console.warn("Lucide icons failed to load:", e);
+            }
+
+            // Randomly assign plane taxi animation to GitHub or LinkedIn hangar
+            const planeIcon = document.querySelector('.plane-icon');
+            if (planeIcon) {
+                const destination = Math.random() < 0.5 ? 'taxi-github' : 'taxi-linkedin';
+                planeIcon.classList.add(destination);
             }
 
             // Load Projects from Manifest
