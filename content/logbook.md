@@ -17,13 +17,23 @@
 <div class="col-span-6 md:col-span-5">REMARKS / PROCEDURES</div>
 </div>
 
+<!-- Entry 0: GeoMate -->
+<div class="grid grid-cols-12 border-b border-gray-800 py-3 px-4 logbook-row hover:bg-white/5 transition">
+<div class="col-span-2 text-amber-400">2026-Pres</div>
+<div class="col-span-4 md:col-span-3 font-bold">GEOSPATIAL DATA ENG</div>
+<div class="col-span-2 hidden md:block text-gray-500">GEOMATE INC</div>
+<div class="col-span-6 md:col-span-5 text-gray-300">
+Geospatial Data Engineer. Spatial data lake & ETL pipelines for OpenStreetMap/Overture Maps data. AWS (S3, EC2, ECS, Lambda, Fargate, RDS), Terraform IaC. OpenDRIVE (XODR) road network generation from raw geospatial data for autonomous driving simulation (CARLA). Commercial OD → SUMO simulation pipeline.
+</div>
+</div>
+
 <!-- Entry 1: WFR Telemetry Lead -->
 <div class="grid grid-cols-12 border-b border-gray-800 py-3 px-4 logbook-row hover:bg-white/5 transition">
 <div class="col-span-2 text-amber-400">2024-Pres</div>
 <div class="col-span-4 md:col-span-3 font-bold">SW ENG & TELEMETRY LEAD</div>
 <div class="col-span-2 hidden md:block text-gray-500">WESTERN U</div>
 <div class="col-span-6 md:col-span-5 text-gray-300">
-Western Formula Racing. Architected end-to-end telemetry platform (CAN-bus, InfluxDB, React). CI/CD pipelines with GitHub Actions. Reduced commercial tool dependency by 80%, diagnostic time by 50%.
+Western Formula Racing. Architected end-to-end telemetry platform (CAN-bus, TimescaleDB, React). CI/CD pipelines with GitHub Actions. Reduced commercial tool dependency by 80%, diagnostic time by 50%.
 </div>
 </div>
 
@@ -33,13 +43,13 @@ Western Formula Racing. Architected end-to-end telemetry platform (CAN-bus, Infl
 <div class="col-span-4 md:col-span-3 font-bold">DATA ENG RESEARCHER</div>
 <div class="col-span-2 hidden md:block text-gray-500">WESTERN U</div>
 <div class="col-span-6 md:col-span-5 text-gray-300">
-Dept of Geography & Environment. Quasi-experimental studies with causal inference. Large-scale ETL pipelines (5M+ records). WGAN models for mobility forecasting.
+Dept of Geography & Environment. Quasi-experimental studies with causal inference. Large-scale ETL pipelines (100M+ OD records). WGAN models for mobility forecasting.
 </div>
 </div>
 
 <!-- Entry 3: CDH Investment -->
 <div class="grid grid-cols-12 border-b border-gray-800 py-3 px-4 logbook-row hover:bg-white/5 transition">
-<div class="col-span-2 text-amber-400">2024-05</div>
+<div class="col-span-2 text-amber-400">2025-05</div>
 <div class="col-span-4 md:col-span-3 font-bold">FINANCIAL ANALYST INTERN</div>
 <div class="col-span-2 hidden md:block text-gray-500">SHANGHAI</div>
 <div class="col-span-6 md:col-span-5 text-gray-300">
@@ -53,7 +63,7 @@ CDH Investment. Automated market-data pipeline (Selenium, LLM). PostGIS/PostgreS
 <div class="col-span-4 md:col-span-3 font-bold">M.Sc. & B.A.</div>
 <div class="col-span-2 hidden md:block text-gray-500">UWO / UCSB</div>
 <div class="col-span-6 md:col-span-5 text-gray-300 italic">
-M.Sc. Geography & Environment (Western U, exp June 2026, GPA 89.25/100). B.A. GIS (UCSB, 2024, Distinction in Major, GPA 3.80/4.0).
+M.Sc. Geography & Environment (Western U, exp June 2026, GPA 4.0/4.0). B.A. GIS (UCSB, 2024, Distinction in Major, GPA 3.80/4.0).
 </div>
 </div>
 </div>

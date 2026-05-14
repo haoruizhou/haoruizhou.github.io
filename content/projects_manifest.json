@@ -1,5 +1,19 @@
 [
   {
+    "id": "lappy",
+    "title": "LAPPY — AI DATA BOT",
+    "tech_stack": "Python / LangGraph / Slack API / Gemini",
+    "description": "AI agent that takes natural language from engineers in Slack, generates Python to query telemetry databases, and returns insights and plots.",
+    "theme": "green"
+  },
+  {
+    "id": "geomate",
+    "title": "GEOMATE XODR PIPELINE",
+    "tech_stack": "Python / AWS / Terraform / OSM",
+    "description": "End-to-end pipeline generating simulation-ready OpenDRIVE road networks from raw geospatial data for autonomous driving validation in CARLA.",
+    "theme": "#00b4d8"
+  },
+  {
     "id": "pecan",
     "title": "PROJECT PECAN",
     "tech_stack": "React / C++ / CAN BUS",
